@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import {TextField} from "@material-ui/core";
+import {TextField, Card, CardContent, CardActionArea, CardActions, CardMedia} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import {Timeline, TimelineItem} from "@material-ui/lab";
 import Container from '@material-ui/core/Container';
@@ -17,6 +17,7 @@ import TimelineConnector from "@material-ui/lab/TimelineConnector";
 import TimelineContent from "@material-ui/lab/TimelineContent";
 import Paper from "@material-ui/core/Paper";
 import FastfoodIcon from '@material-ui/icons/Fastfood';
+import {Theaters, MusicNote} from "@material-ui/icons";
 import axios from "axios";
 
 function Copyright() {
@@ -62,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  root: {
+    width: 250,
+  },
+  media: {
+    height: 270,
+  },
 }));
 
 const webServiceUrl = 'http://localhost:8080/life-events'
@@ -82,6 +89,15 @@ function createTimelineData(birthYearResp1, birthYearResp2, birthYear){
   return timelineData
 }
 
+function MediaIcon({type}){
+  if (type === "Movie"){
+    return <Theaters/>
+  }
+  if(type === "Music"){
+    return <MusicNote/>
+  }
+}
+
 function EraEvents({era}){
   const classes = useStyles();
  return(
@@ -90,24 +106,62 @@ function EraEvents({era}){
 
          <TimelineItem>
            <TimelineOppositeContent>
-             <Paper elevation={3} className={classes.paper}>
-               <Typography variant="h6" component="h1">
-                 {eraEvent?.name}
-               </Typography>
-               <Typography>{eraEvent?.imgUrl}</Typography>
-             </Paper>
+             <Card className={classes.root} style={{float: "right"}}>
+               <CardActionArea>
+                 <CardMedia
+                         className={classes.media}
+                         image={`https:${eraEvent.imgUrl}`}
+                         title="Contemplative Reptile"
+                 />
+                 <CardContent>
+                   <Typography gutterBottom variant="h5" component="h2">
+                     <MediaIcon type={eraEvent.type}/>
+                     {eraEvent.name}
+                   </Typography>
+                   <Typography variant="body2" color="textSecondary" component="p">
+                   </Typography>
+                 </CardContent>
+               </CardActionArea>
+               <CardActions>
+                 <Button href={eraEvent.mediaUrl} size="small" color="primary">
+                   Learn More
+                 </Button>
+               </CardActions>
+             </Card>
            </TimelineOppositeContent>
            <TimelineSeparator>
              <TimelineConnector />
            </TimelineSeparator>
            <TimelineContent>
              {era.birthYear2Events[i]?.name && (
-             <Paper elevation={3} className={classes.paper}>
-               <Typography variant="h6" component="h1">
-                 {era.birthYear2Events[i]?.name}
-               </Typography>
-               <Typography>{era.birthYear2Events[i]?.imgUrl}</Typography>
-             </Paper>
+                     <Card className={classes.root} style={{float: "left"}}>
+                       <CardActionArea>
+                         <CardMedia
+                                 className={classes.media}
+                                 image={`https:${era.birthYear2Events[i].imgUrl}`}
+                                 title="Contemplative Reptile"
+                         />
+                         <CardContent>
+                           <Typography gutterBottom variant="h5" component="h2">
+                             <MediaIcon type={era.birthYear2Events[i].type}/>
+                             {era.birthYear2Events[i].name}
+                           </Typography>
+                           <Typography variant="body2" color="textSecondary" component="p">
+                           </Typography>
+                         </CardContent>
+                       </CardActionArea>
+                       <CardActions>
+                         <Button href={era.birthYear2Events[i].mediaUrl} size="small" color="primary">
+                           Learn More
+                         </Button>
+                       </CardActions>
+                     </Card>
+             // <Paper elevation={3} className={classes.paper}>
+             //   <Typography variant="h6" component="h1">
+             //     {era.birthYear2Events[i]?.name}
+             //   </Typography>
+             //   <Typography>{era.birthYear2Events[i]?.imgUrl}</Typography>
+             // </Paper>
              )}
            </TimelineContent>
          </TimelineItem>
