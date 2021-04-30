@@ -66,18 +66,74 @@ const useStyles = makeStyles((theme) => ({
 
 const webServiceUrl = 'http://localhost:8080/life-events'
 
+function createTimelineData(birthYearResp1, birthYearResp2, birthYear){
+  const timelineData = {
+    combinedEraEvents: []
+  }
+  const length = Math.min(...[birthYearResp1.data.lifeEventsEvents.length, birthYearResp2.data.lifeEventsEvents.length])
+  for(let i = 0; i < length; i++){
+    timelineData.combinedEraEvents.push({
+      birthYear1Events: [...birthYearResp1.data.lifeEventsEvents[i].events],
+      birthYear2Events: [...birthYearResp2.data.lifeEventsEvents[i].events],
+      relativeYear: birthYearResp1.data.lifeEventsEvents[i].year - birthYear
+    })
+  }
+  console.log("timeline data", timelineData)
+  return timelineData
+}
+
+function EraEvents({era}){
+  const classes = useStyles();
+ return(
+         <>
+           {era.birthYear1Events.map((eraEvent, i) => (
+
+         <TimelineItem>
+           <TimelineOppositeContent>
+             <Paper elevation={3} className={classes.paper}>
+               <Typography variant="h6" component="h1">
+                 {eraEvent?.name}
+               </Typography>
+               <Typography>{eraEvent?.imgUrl}</Typography>
+             </Paper>
+           </TimelineOppositeContent>
+           <TimelineSeparator>
+             <TimelineConnector />
+           </TimelineSeparator>
+           <TimelineContent>
+             {era.birthYear2Events[i]?.name && (
+             <Paper elevation={3} className={classes.paper}>
+               <Typography variant="h6" component="h1">
+                 {era.birthYear2Events[i]?.name}
+               </Typography>
+               <Typography>{era.birthYear2Events[i]?.imgUrl}</Typography>
+             </Paper>
+             )}
+           </TimelineContent>
+         </TimelineItem>
+                                     )
+            )
+           }
+           </>
+ )
+}
+
 export default function App() {
   const [birthYear1, setBirthYear1] = React.useState('');
   const [birthYear2, setBirthYear2] = React.useState('');
   const [isComparedView, setIsComparedView] = React.useState(false)
-  const [birthYear1Data, setBirthYear1Data] = React.useState()
-  const [birthYear2Data, setBirthYear2Data] = React.useState()
+  const [timelineData, setTimelineData] = React.useState()
   const classes = useStyles();
 
-  function compareClicked() {
+  async function compareClicked() {
     setIsComparedView(true)
-    axios.get(`${webServiceUrl}?year=${birthYear1}`).then(resp => setBirthYear1Data(resp.data))
-    axios.get(`${webServiceUrl}?year=${birthYear2}`).then(resp => setBirthYear2Data(resp.data))
+    try {
+    const birthYear1Response = await axios.get(`${webServiceUrl}/${birthYear1}`)
+    const birthYear2Response = await axios.get(`${webServiceUrl}/${birthYear2}`)
+    setTimelineData(createTimelineData(birthYear1Response, birthYear2Response, birthYear1))
+    } catch (e) {
+      console.log(e, "Something went wrong fetching date data")
+    }
   }
 
   return (
@@ -123,65 +179,72 @@ export default function App() {
               </Container>
             </main>
             ) : (
-                    birthYear1Data && birthYear2Data && (
+                    timelineData && (
 
                     <Grid container spacing={4} alignItems={"center"} justify={"center"}>
-                      <Grid item>
-                       <Typography>
-                         {birthYear1}
-                       </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Typography>
-                          {birthYear2}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
+                      {/*<Grid item>*/}
+                      {/*<Grid item>*/}
+                      {/* <Typography>*/}
+                      {/*   {birthYear1}*/}
+                      {/* </Typography>*/}
+                      {/*</Grid>*/}
+                      {/*<Grid item>*/}
+                      {/*  <Typography>*/}
+                      {/*    {birthYear2}*/}
+                      {/*  </Typography>*/}
+                      {/*</Grid>*/}
+                      {/*<Grid item>*/}
+                      {/*</Grid>*/}
 
-                      <Timeline align={"alternate"}>
+                      <Timeline>
+                        {timelineData.combinedEraEvents.map(era => (
+                                <>
                         <TimelineItem>
                           <TimelineOppositeContent>
-
                           </TimelineOppositeContent>
                           <TimelineSeparator>
                             <Typography variant="body2" color="textSecondary">
-                              Childhood
+                              {era.relativeYear > 0 ? `${era.relativeYear} years old` : 'Birth Year'}
                             </Typography>
                             <TimelineConnector />
                           </TimelineSeparator>
                           <TimelineContent>
-
                           </TimelineContent>
                         </TimelineItem>
-                        {birthYear1Data.lifeEventsEvents.forEach((events, i) => {
-                          events.map((timeEvent, index) => {
-                          return (
-                        <TimelineItem>
-                          <TimelineOppositeContent>
-                            <Paper elevation={3} className={classes.paper}>
-                              <Typography variant="h6" component="h1">
-                                {timeEvent.name}
-                              </Typography>
-                              <Typography>{timeEvent.imageUrl}</Typography>
-                            </Paper>
-                          </TimelineOppositeContent>
-                          <TimelineSeparator>
-                            <TimelineConnector />
-                          </TimelineSeparator>
-                          <TimelineContent>
-                            <Paper elevation={3} className={classes.paper}>
-                              <Typography variant="h6" component="h1">
-                                Eat
-                              </Typography>
-                              <Typography>Because you need strength</Typography>
-                            </Paper>
-                          </TimelineContent>
-                        </TimelineItem>
+                                    <EraEvents era={era}/>
+                                  {/*{era.}*/}
+                                  {/*<TimelineItem>*/}
+                                  {/*  <TimelineOppositeContent>*/}
+                                  {/*    <Paper elevation={3} className={classes.paper}>*/}
+                                  {/*      <Typography variant="h6" component="h1">*/}
+                                  {/*        /!*{timeEvent.name}*!/*/}
+                                  {/*      </Typography>*/}
+                                  {/*      /!*<Typography>{timeEvent.imageUrl}</Typography>*!/*/}
+                                  {/*    </Paper>*/}
+                                  {/*  </TimelineOppositeContent>*/}
+                                  {/*  <TimelineSeparator>*/}
+                                  {/*    <TimelineConnector />*/}
+                                  {/*  </TimelineSeparator>*/}
+                                  {/*  <TimelineContent>*/}
+                                  {/*    <Paper elevation={3} className={classes.paper}>*/}
+                                  {/*      <Typography variant="h6" component="h1">*/}
+                                  {/*        Eat*/}
+                                  {/*      </Typography>*/}
+                                  {/*      <Typography>Because you need strength</Typography>*/}
+                                  {/*    </Paper>*/}
+                                  {/*  </TimelineContent>*/}
+                                  {/*</TimelineItem>*/}
+                        </>
+                        ))}
+                        {/*{birthYear1Data.lifeEventsEvents.forEach((events, i) => {*/}
+                        {/*  events.map((timeEvent, index) => {*/}
+                        {/*  return (*/}
 
-                          )})})
+
+                        {/*  )})})*/}
 
 
-                        })
+                        {/*})*/}
                         {/*<TimelineItem>*/}
                         {/*  <TimelineOppositeContent>*/}
                         {/*    <Paper elevation={3} className={classes.paper}>*/}
@@ -228,7 +291,7 @@ export default function App() {
                         {/*</TimelineItem>*/}
                       </Timeline>
                       </Grid>
-                    </Grid>
+                    // </Grid>
                     )
             )}
 
