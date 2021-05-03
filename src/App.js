@@ -24,9 +24,9 @@ function Copyright() {
   return (
           <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-              Your Website
-            </Link>{' '}
+            {/*<Link color="inherit" href="https://material-ui.com/">*/}
+            {/*  Your Website*/}
+            {/*</Link>{' '}*/}
             {new Date().getFullYear()}
             {'.'}
           </Typography>
@@ -151,17 +151,11 @@ function EraEvents({era}){
                          </CardContent>
                        </CardActionArea>
                        <CardActions>
-                         <Button href={era.birthYear2Events[i].mediaUrl} size="small" color="primary">
+                         <Button href={era.birthYear2Events[i].mediaUrl} target={"_blank"} size="small" color="primary">
                            Learn More
                          </Button>
                        </CardActions>
                      </Card>
-             // <Paper elevation={3} className={classes.paper}>
-             //   <Typography variant="h6" component="h1">
-             //     {era.birthYear2Events[i]?.name}
-             //   </Typography>
-             //   <Typography>{era.birthYear2Events[i]?.imgUrl}</Typography>
-             // </Paper>
              )}
            </TimelineContent>
          </TimelineItem>
@@ -215,10 +209,10 @@ export default function App() {
                     <Grid container justify={"center"} spacing={"4"}>
                       <Grid item container spacing={6} justify="center">
                         <Grid item>
-                            <TextField variant={"outlined"} label={"Your Birth Year"} type={"number"} onChange={(e) => setBirthYear1(e.target.value)}/>
+                            <TextField variant={"outlined"} label={"Your Birth Year"}  onChange={(e) => setBirthYear1(e.target.value)}/>
                         </Grid>
                         <Grid item>
-                            <TextField variant={"outlined"} label={"Birth Year To Compare"} type={"number"} onChange={(e) => setBirthYear2(e.target.value)}/>
+                            <TextField variant={"outlined"} label={"Birth Year To Compare"}  onChange={(e) => setBirthYear2(e.target.value)}/>
                         </Grid>
                       </Grid>
                       <Grid item>
@@ -235,21 +229,17 @@ export default function App() {
             ) : (
                     timelineData && (
 
-                    <Grid container spacing={4} alignItems={"center"} justify={"center"}>
-                      {/*<Grid item>*/}
-                      {/*<Grid item>*/}
-                      {/* <Typography>*/}
-                      {/*   {birthYear1}*/}
-                      {/* </Typography>*/}
-                      {/*</Grid>*/}
-                      {/*<Grid item>*/}
-                      {/*  <Typography>*/}
-                      {/*    {birthYear2}*/}
-                      {/*  </Typography>*/}
-                      {/*</Grid>*/}
-                      {/*<Grid item>*/}
-                      {/*</Grid>*/}
-
+                    <Grid container direction={"column"} spacing={4} alignItems={"center"} justify={"center"}>
+                        <Grid item spacing={4} >
+                            <Grid justifyContent={"space-between"} container spacing={10} direction={"row"}>
+                         <Grid item>
+                           <Typography variant="h2" >{birthYear1}</Typography>
+                         </Grid>
+                          <Grid item>
+                            <Typography variant="h2" >{birthYear2}</Typography>
+                          </Grid>
+                            </Grid>
+                        </Grid>
                       <Timeline>
                         {timelineData.combinedEraEvents.map(era => (
                                 <>
@@ -266,100 +256,24 @@ export default function App() {
                           </TimelineContent>
                         </TimelineItem>
                                     <EraEvents era={era}/>
-                                  {/*{era.}*/}
-                                  {/*<TimelineItem>*/}
-                                  {/*  <TimelineOppositeContent>*/}
-                                  {/*    <Paper elevation={3} className={classes.paper}>*/}
-                                  {/*      <Typography variant="h6" component="h1">*/}
-                                  {/*        /!*{timeEvent.name}*!/*/}
-                                  {/*      </Typography>*/}
-                                  {/*      /!*<Typography>{timeEvent.imageUrl}</Typography>*!/*/}
-                                  {/*    </Paper>*/}
-                                  {/*  </TimelineOppositeContent>*/}
-                                  {/*  <TimelineSeparator>*/}
-                                  {/*    <TimelineConnector />*/}
-                                  {/*  </TimelineSeparator>*/}
-                                  {/*  <TimelineContent>*/}
-                                  {/*    <Paper elevation={3} className={classes.paper}>*/}
-                                  {/*      <Typography variant="h6" component="h1">*/}
-                                  {/*        Eat*/}
-                                  {/*      </Typography>*/}
-                                  {/*      <Typography>Because you need strength</Typography>*/}
-                                  {/*    </Paper>*/}
-                                  {/*  </TimelineContent>*/}
-                                  {/*</TimelineItem>*/}
                         </>
                         ))}
-                        {/*{birthYear1Data.lifeEventsEvents.forEach((events, i) => {*/}
-                        {/*  events.map((timeEvent, index) => {*/}
-                        {/*  return (*/}
-
-
-                        {/*  )})})*/}
-
-
-                        {/*})*/}
-                        {/*<TimelineItem>*/}
-                        {/*  <TimelineOppositeContent>*/}
-                        {/*    <Paper elevation={3} className={classes.paper}>*/}
-                        {/*      <Typography variant="h6" component="h1">*/}
-                        {/*        Eat*/}
-                        {/*      </Typography>*/}
-                        {/*      <Typography>Because you need strength</Typography>*/}
-                        {/*    </Paper>*/}
-                        {/*  </TimelineOppositeContent>*/}
-                        {/*  <TimelineSeparator>*/}
-
-                        {/*    <TimelineConnector />*/}
-                        {/*  </TimelineSeparator>*/}
-                        {/*  <TimelineContent>*/}
-                        {/*    <Paper elevation={3} className={classes.paper}>*/}
-                        {/*      <Typography variant="h6" component="h1">*/}
-                        {/*        Eat*/}
-                        {/*      </Typography>*/}
-                        {/*      <Typography>Because you need strength</Typography>*/}
-                        {/*    </Paper>*/}
-                        {/*  </TimelineContent>*/}
-                        {/*</TimelineItem>*/}
-                        {/*<TimelineItem>*/}
-                        {/*  <TimelineOppositeContent>*/}
-                        {/*    <Paper elevation={3} className={classes.paper}>*/}
-                        {/*      <Typography variant="h6" component="h1">*/}
-                        {/*        Eat*/}
-                        {/*      </Typography>*/}
-                        {/*      <Typography>Because you need strength</Typography>*/}
-                        {/*    </Paper>*/}
-                        {/*  </TimelineOppositeContent>*/}
-                        {/*  <TimelineSeparator>*/}
-
-                        {/*    <TimelineConnector />*/}
-                        {/*  </TimelineSeparator>*/}
-                        {/*  <TimelineContent>*/}
-                        {/*    <Paper elevation={3} className={classes.paper}>*/}
-                        {/*      <Typography variant="h6" component="h1">*/}
-                        {/*        Eat*/}
-                        {/*      </Typography>*/}
-                        {/*      <Typography>Because you need strength</Typography>*/}
-                        {/*    </Paper>*/}
-                        {/*  </TimelineContent>*/}
-                        {/*</TimelineItem>*/}
                       </Timeline>
                       </Grid>
-                    // </Grid>
                     )
             )}
 
-            {/* Footer */}
-            {/*<footer className={classes.footer}>*/}
-            {/*  <Typography variant="h6" align="center" gutterBottom>*/}
-            {/*    Footer*/}
-            {/*  </Typography>*/}
-            {/*  <Typography variant="subtitle1" align="center" color="textSecondary" component="p">*/}
-            {/*    Something here to give the footer a purpose!*/}
-            {/*  </Typography>*/}
-            {/*  <Copyright />*/}
-            {/*</footer>*/}
-            {/* End footer */}
+             {/*Footer*/}
+            <footer className={classes.footer}>
+              <Typography variant="h6" align="center" gutterBottom>
+                💻 Hack-a-thon 2021 🎉
+              </Typography>
+              <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+                Made by Robert Heidbrink and Jayton Birch
+              </Typography>
+              <Copyright />
+            </footer>
+             {/*End footer*/}
           </React.Fragment>
   );
 }
